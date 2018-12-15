@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Seat Geek Api Test</title>
+</head>
+
+<body>
+  <h1>Testing Seat Geek Api</h1>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    // This is our API key. Add your own API key between the ""
+    var client_id = "MTQ0MTM3OTV8MTU0NDg0MjEwMC45OQ";
+    var client_secret = "1cd34ee3e634b21a4b7f47de77df7eb46b273451bccc6a389ed4f3abf35cd785";
+
+    // Here we are building the URL we need to query the database
+    var queryURL = "https://api.seatgeek.com/2/events?client_id="+ client_id;
+    var queryURL1 = "https://api.seatgeek.com/2/venues?&client_id="+ client_id;
+    // We then created an AJAX call
+    $.ajax({
+      url: queryURL1,
+      method: "GET"
+    }).then(function(response) {
+   
+      // Create CODE HERE to Log the queryURL
+      console.log(queryURL1);
+      // Create CODE HERE to log the resulting object
+      console.log(response);
+      for(var i=0; i<10; i++){
+        console.log(response.venues[i].city);
+      }
+      
+      // Create CODE HERE to transfer content to HTML
+     
+    });
+  </script>
+</body>
+</html>
