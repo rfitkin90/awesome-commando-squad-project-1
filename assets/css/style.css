@@ -8,6 +8,10 @@ margin: 0;
 padding: 0;
 }
 
+#additional-info {
+    border: 2px solid #777;
+}
+
 .result-div {
     border: 2px solid #777;
 }
