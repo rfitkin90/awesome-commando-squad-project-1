@@ -11,7 +11,7 @@ $(document).ready(function () {
     };
     firebase.initializeApp(config);
     var database = firebase.database();
-
+  
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
     firebase.auth().getRedirectResult().then(function (result) {
