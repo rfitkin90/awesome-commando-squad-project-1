@@ -19,10 +19,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cat Gif Generator</title>
+    <title>Event Planner</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="./assets/css/reset.css">
+    <!-- <link rel="stylesheet" href="./assets/css/reset.css"> -->
+    <script src="./assets/javascript/moment-with-locales.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -32,7 +33,7 @@
 </head>
 
 <body>
-    <div id="map"></div>
+    <!-- <div id="map"></div>
     <script>
         var map;
         function initMap() {
@@ -43,7 +44,29 @@
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJspIZnBYBASjscIsyBXVgUnt-u7SETMY&callback=initMap"
-        async defer></script>
+        async defer></script> -->
+
+    <!-- seatgeek API -->
+    <form>
+        <button class='btn' id='sports-argument'>Sports</button>
+        <button class='btn' id='music-argument'>Music</button>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Enter Artist or Team Name</label>
+            <input class="form-control" id="seatgeek-argument" placeholder="">
+        </div>
+        <button type="submit" class="btn btn-primary" id='seatgeek-btn'>Submit</button>
+    </form>
+
+    <!-- additional information div -->
+    <div id="additional-info">
+        <h2>Additional Info</h2>
+        <div id="weather-info">
+        </div>
+    </div>
+
+    <!-- event choices -->
+    <div id='seatgeek-results'></div>
+
 </body>
 
 >>>>>>> fb3f949b925234e25d0e87315d1c2f8b14f737c7
