@@ -33,18 +33,6 @@
 </head>
 
 <body>
-    <!-- <div id="map"></div>
-    <script>
-        var map;
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: -34.397, lng: 150.644 },
-                zoom: 8
-            });
-        }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJspIZnBYBASjscIsyBXVgUnt-u7SETMY&callback=initMap"
-        async defer></script> -->
 
     <!-- seatgeek API -->
     <form>
@@ -63,6 +51,77 @@
         <div id="weather-info">
         </div>
     </div>
+
+    <!-- google map -->
+    <div id="map"></div>
+
+    <!-- create map and append marker to event location -->
+    <script>
+        $(document).on('click', '.info-btn', function (e) {
+            e.preventDefault();
+            var latValue = parseFloat($(this).attr('data-lat'));
+            var lngValue = parseFloat($(this).attr('data-lng'));
+            // intiMap(latValue, lngValue);
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center: {
+                    lat: latValue,
+                    lng: lngValue
+                }
+            });
+            var marker = new google.maps.Marker({
+                position: {
+                    lat: latValue,
+                    lng: lngValue
+                },
+                map: map,
+                // title: 'Hello World!'
+            });
+
+            var service;
+            var infowindow;
+
+            var request = {
+                location: {
+                    lat: latValue,
+                    lng: lngValue
+                },
+                radius: '500',
+                type: ['restaurant']
+            };
+
+            service = new google.maps.places.PlacesService(map);
+            service.nearbySearch(request, callback);
+
+            function callback(results, status) {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    for (var i = 0; i < results.length; i++) {
+                        var place = results[i];
+                        createMarker(results[i]);
+                    }
+                }
+            }
+
+            function createMarker(place) {
+                var placeLoc = place.geometry.location;
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: place.geometry.location
+                });
+
+                google.maps.event.addListener(marker, 'click', function () {
+                    console.log(place.name);
+                    // infowindow.open(map, this);
+                });
+            }
+        });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJspIZnBYBASjscIsyBXVgUnt-u7SETMY&libraries=places">
+    </script>
+
+
+
+
 
     <!-- event choices -->
     <div id='seatgeek-results'></div>
