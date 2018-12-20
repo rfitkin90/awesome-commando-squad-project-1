@@ -2,13 +2,13 @@
 
 <head>
   <title>Twitter api demo using codebird</title>
-  <script type="text/javascript" src="codebird.js"></script>
+  <script type="text/javascript" src="twitter.js"></script>
 
   <script type="text/javascript">
-    window.onload = function () {
+    $(document).on('click', '.info-btn', function (e) {
 
       // update title
-      var query = "stuff";
+      var query = "pelicans";
       var tweets_title = document.getElementById('tweets_title');
       tweets_title.textContent = query + " tweets";
 
@@ -53,7 +53,7 @@
         }
       });
 
-    };
+    });
   </script>
 </head>
 

@@ -42,7 +42,6 @@ $(document).ready(function () {
       // ...
    });
 
-
    // seatgeek api
    var eventType;
    // event type parameters
