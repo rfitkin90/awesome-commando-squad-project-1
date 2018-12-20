@@ -74,48 +74,57 @@ $(document).ready(function () {
       axios.get(queryURL)
          .then(function (response) {
             console.log(response);
-            for (var i = 0; i < 10; i++) {
-               // individual result div
-               $('#seatgeek-results').append(`<div class='result-div' id='result-${response.data.events[i].id}'>
+            console.log(eventType);
+            if(eventType === undefined){
+                  $('.modal-body').text("Please select an event type.");
+                  $('#myModal').modal('show');     
+            }
+            else if (response.data.events.length === 0) {
+               $('.modal-body').text("No upcoming events...");
+               $('#myModal').modal('show');
+            } else {
+               for (var i = 0; i < 10; i++) {
+                  // individual result div
+                  $('#seatgeek-results').append(`<div class='result-div' id='result-${response.data.events[i].id}'>
                         </div>`);
-               // event title
-               $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-title'></div>`);
-               $(`#${response.data.events[i].id}-title`).append(`<div>${response.data.events[i].title}</div>`);
-               // performers
-               $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-performers'></div>`);
-               $(`#${response.data.events[i].id}-performers`).append(`<div><p class='info-title'>Performers: </p></div>`);
-               // limit sport events to 2 performers so you don't get some other irrelevant info for 3rd
-               if (eventType === 'sports') {
-                  for (var j = 0; j < 2; j++) {
-                     $(`#${response.data.events[i].id}-performers`).append(`<p>
+                  // event title
+                  $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-title'></div>`);
+                  $(`#${response.data.events[i].id}-title`).append(`<div>${response.data.events[i].title}</div>`);
+                  // performers
+                  $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-performers'></div>`);
+                  $(`#${response.data.events[i].id}-performers`).append(`<div><p class='info-title'>Performers: </p></div>`);
+                  // limit sport events to 2 performers so you don't get some other irrelevant info for 3rd
+                  if (eventType === 'sports') {
+                     for (var j = 0; j < 2; j++) {
+                        $(`#${response.data.events[i].id}-performers`).append(`<p>
                                 ${response.data.events[i].performers[j].name}</p>`);
-                  }
-               } else {
-                  for (var j = 0; j < response.data.events[i].performers.length; j++) {
-                     $(`#${response.data.events[i].id}-performers`).append(`<p>
+                     }
+                  } else {
+                     for (var j = 0; j < response.data.events[i].performers.length; j++) {
+                        $(`#${response.data.events[i].id}-performers`).append(`<p>
                                 ${response.data.events[i].performers[j].name}</p>`);
+                     }
                   }
-               }
-               // venue
-               $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-venue'></div>`);
-               $(`#${response.data.events[i].id}-venue`).append(`<p class='info-title'>Venue: </p>`);
-               $(`#${response.data.events[i].id}-venue`).append(response.data.events[i].venue.name);
-               $(`#${response.data.events[i].id}-venue`).append(`<p>${response.data.events[i].venue.display_location}</p>`);
-               // $(`#result-${response.data.events[i].id}`).append(`<p class='location' 
-               //          id='location-${response.data.events[i].id}'>
-               //          ${response.data.events[i].venue.address}</p>`);
-               // $(`#result-${response.data.events[i].id}`).append(`<p>
-               //          ${response.data.events[i].venue.extended_address}</p>`);
-               // time/date
-               $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-date'></div>`);
-               $(`#${response.data.events[i].id}-date`).append(`<span class='info-title'>Date/Time: </span><span>
+                  // venue
+                  $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-venue'></div>`);
+                  $(`#${response.data.events[i].id}-venue`).append(`<p class='info-title'>Venue: </p>`);
+                  $(`#${response.data.events[i].id}-venue`).append(response.data.events[i].venue.name);
+                  $(`#${response.data.events[i].id}-venue`).append(`<p>${response.data.events[i].venue.display_location}</p>`);
+                  // $(`#result-${response.data.events[i].id}`).append(`<p class='location' 
+                  //          id='location-${response.data.events[i].id}'>
+                  //          ${response.data.events[i].venue.address}</p>`);
+                  // $(`#result-${response.data.events[i].id}`).append(`<p>
+                  //          ${response.data.events[i].venue.extended_address}</p>`);
+                  // time/date
+                  $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-date'></div>`);
+                  $(`#${response.data.events[i].id}-date`).append(`<span class='info-title'>Date/Time: </span><span>
                         ${moment(response.data.events[i].datetime_local).format('MMMM Do YYYY, h:mm:ss a')}</span><br>`);
-               // page url
-               // $(`#result-${response.data.events[i].id}`).append(`<h3>Shop Tickets</h3>`);
-               // $(`#result-${response.data.events[i].id}`).append(`<p><a href='${response.data.events[i].url}' 
-               //          target='blank'>${response.data.events[i].url}</a></p>`);
-               // more info
-               $(`#result-${response.data.events[i].id}`).append(`<button class='btn info-btn'
+                  // page url
+                  // $(`#result-${response.data.events[i].id}`).append(`<h3>Shop Tickets</h3>`);
+                  // $(`#result-${response.data.events[i].id}`).append(`<p><a href='${response.data.events[i].url}' 
+                  //          target='blank'>${response.data.events[i].url}</a></p>`);
+                  // more info
+                  $(`#result-${response.data.events[i].id}`).append(`<button class='btn info-btn'
                         data-zipcode='${response.data.events[i].venue.postal_code}' 
                         data-country='${response.data.events[i].venue.country}'
                         data-date='${response.data.events[i].datetime_local}'
@@ -125,6 +134,7 @@ $(document).ready(function () {
                         data-extendAddress='${response.data.events[i].venue.extended_address}'
                         data-tickets='${response.data.events[i].url}'
                         >More Info</button>`);
+               }
             }
          });
       ;
@@ -134,6 +144,16 @@ $(document).ready(function () {
    // openweather API
    $(document).on('click', '.info-btn', function (e) {
       e.preventDefault();
+      $('#additional-info').append('<p id="additional-info-title">Additional Info</p>');
+      $('#additional-info').css({
+          'border-width' : `${2}px`,
+          'border-type' : 'solid',
+          'border-color': '#77777',
+          'padding': `${5}px`
+     });
+     
+      $('#additional-info').append('<div id = "weather-info">');
+
       $('#weather-info').empty();
       $('#weather-info').append(`<p id='weather-title'>Weather</p>`);
       var APIKey = "166a433c57516f51dfab1f7edaed8413";
@@ -238,6 +258,8 @@ $(document).ready(function () {
    // google maps API
    $(document).on('click', '.info-btn', function (e) {
       e.preventDefault();
+      $('#additional-info').append('<div id = "map">');
+
       console.log('hey');
       var latValue = parseFloat($(this).attr('data-lat'));
       var lngValue = parseFloat($(this).attr('data-lng'));
@@ -291,7 +313,7 @@ $(document).ready(function () {
                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
             }
          });
-         var infowindow = new google.maps.InfoWindow({
+         infowindow = new google.maps.InfoWindow({
             content: `${place.name}<br>${place.vicinity}`,
             map: map,
          });
@@ -310,46 +332,54 @@ $(document).ready(function () {
    // twitter api
    $(document).on('click', '.info-btn', function (e) {
       e.preventDefault();
-
+      
+      $('#additional-info').append('<div id = "tweets">');
       // update title
       var query = queryText;
-      $('#tweets').append(`<p id='tweet-title'>${query} tweets</p>`);
+      $('#tweets').append(`<p class = 'btn' id='tweet-title'>${query} tweets</p>`);
 
+      $(document).on('click', '#tweet-title', function(e){
+         console.log("button pressed");
+      
       var cb = new Codebird;
       // API TOKEN AND SECRET - DO NOT PUBLISH
       cb.setConsumerKey("GzOQlmiqQSoFVC3pxUskiFZfV", "lU4VcpQXHBdKWrgXWct0ynGqHzDEB9kRAsmt60KyiH2dtVVDNf");
 
       // get bearer token
-      cb.__call("oauth2_token", {}, function (reply, err) {
-         var bearer_token;
-         if (err) {
-            console.log("error response or timeout exceeded" + err.error);
-         }
-         if (reply) {
-            bearer_token = reply.access_token;
-            console.log('🐻 bearer_token', bearer_token);
-
-            // set security token
-            cb.setBearerToken(bearer_token);
-
-            // search tweets
-            var params = {
-               q: query
-            };
-            console.log('💹  search_tweets.params', params);
-            cb.__call("search_tweets", params, function (reply) {
-               console.log('💹  search_tweets.reply', reply);
-               if (reply.statuses) {
-                  console.log(reply.statuses);
-
-                  // iterate through tweets and add to list
-                  reply.statuses.forEach(function (tweet) {
-                     $('#tweet-title').after(`<div class='tweet-div'>${tweet.text}</div>`);
-                  });
-               }
-            });
-         }
+      
+         cb.__call("oauth2_token", {}, function (reply, err) {
+            var bearer_token;
+            if (err) {
+               console.log("error response or timeout exceeded" + err.error);
+            }
+            if (reply) {
+               bearer_token = reply.access_token;
+               console.log('🐻 bearer_token', bearer_token);
+   
+               // set security token
+               cb.setBearerToken(bearer_token);
+   
+               // search tweets
+               var params = {
+                  q: query
+               };
+               console.log('💹  search_tweets.params', params);
+               cb.__call("search_tweets", params, function (reply) {
+                  console.log('💹  search_tweets.reply', reply);
+                  if (reply.statuses) {
+                     console.log(reply.statuses);
+   
+                     // iterate through tweets and add to list
+                     reply.statuses.forEach(function (tweet) {
+                        $('#tweet-title').after(`<div class='tweet-div'>${tweet.text}</div>`);
+                     });
+                  }
+               });
+            }
+         });
       });
+
+      
 
    });
 
