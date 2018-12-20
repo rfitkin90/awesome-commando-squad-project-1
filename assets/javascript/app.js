@@ -11,7 +11,7 @@ $(document).ready(function () {
     };
     firebase.initializeApp(config);
     var database = firebase.database();
-  
+
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
     firebase.auth().getRedirectResult().then(function (result) {
@@ -76,11 +76,11 @@ $(document).ready(function () {
                     // venue
                     $(`#result-${response.data.events[i].id}`).append(`<h3>Venue</h3>`);
                     $(`#result-${response.data.events[i].id}`).append(response.data.events[i].venue.name);
+                    $(`#result-${response.data.events[i].id}`).append(`<p class='location' 
+                        id='location-${response.data.events[i].id}'>
+                        ${response.data.events[i].venue.address}</p>`);
                     $(`#result-${response.data.events[i].id}`).append(`<p>
                         ${response.data.events[i].venue.extended_address}</p>`);
-                    $(`#result-${response.data.events[i].id}`).append(`<p class='location' 
-                        id='location-${response.data.events[i].id}'
-                        ${response.data.events[i].venue.address}</p>`);
                     // time/date
                     $(`#result-${response.data.events[i].id}`).append(`<h3>Date/Time</h3>`);
                     $(`#result-${response.data.events[i].id}`).append(`<p>
@@ -120,10 +120,10 @@ $(document).ready(function () {
         // get weather response
         axios.get(queryURL)
             .then(function (response) {
-                console.log(moment($(this).attr('data-date')).diff(moment(response.data.list[response.data.list.length - 1].dx_txt), 'h'));
+                console.log(moment($(this).attr('data-date')).diff(moment(response.data.list[response.data.list.length - 1].dt_txt), 'h'));
                 console.log(response.data.list.length - 1);
                 console.log(response.data.list[response.data.list.length - 1]);
-                console.log(response.data.list[response.data.list.length - 1].dx_txt);
+                console.log(response.data.list[response.data.list.length - 1].dt_txt);
                 // if event is within the next 5 days(can't get forecast data beyond that w/o $)
                 if (Math.abs(moment().diff(moment($(this).attr('data-date')), 'd')) <= 5) {
 
@@ -156,6 +156,8 @@ $(document).ready(function () {
                             'color': '#007bff',
                             'cursor': 'pointer',
                         });
+                        $('#wind-speed').html(`Wind: ${Math.floor(response.data.list[i].wind.speed * 1.60934)} km/h 
+                            ${windArrow}</p>`);
                     });
                     // convert temp back to farenheit
                     $(document).on('click', '#farenheit-converter', function () {
@@ -168,6 +170,8 @@ $(document).ready(function () {
                             'color': '#007bff',
                             'cursor': 'pointer',
                         });
+                        $('#wind-speed').html(`Wind: ${Math.floor(response.data.list[i].wind.speed)} mph 
+                            ${windArrow}</p>`);
                     });
                     // humidity
                     $('#weather-info').append(`<p>Humidity: ${response.data.list[i].main.humidity}%</p>`);
@@ -192,13 +196,83 @@ $(document).ready(function () {
                     } else {
                         windArrow = '&#x2197;';
                     }
-                    $('#weather-info').append(`<p>Wind: ${Math.floor(response.data.list[i].wind.speed)} mph 
-                        ${windArrow}</p>`);
+                    $('#weather-info').append(`<p id='wind-speed'>
+                        Wind: ${Math.floor(response.data.list[i].wind.speed)} mph ${windArrow}</p>`);
                 } else {
                     $('#weather-info').append(`<p>Event not soon enough for accurate weather forecast.</p>`);
                 }
             });
         ;
+    });
+
+    // google maps API
+    $(document).on('click', '.info-btn', function (e) {
+        e.preventDefault();
+        var latValue = parseFloat($(this).attr('data-lat'));
+        var lngValue = parseFloat($(this).attr('data-lng'));
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: {
+                lat: latValue,
+                lng: lngValue
+            }
+        });
+        var marker = new google.maps.Marker({
+            position: {
+                lat: latValue,
+                lng: lngValue
+            },
+            map: map,
+        });
+
+        var service;
+        var infowindow;
+
+        var request = {
+            location: {
+                lat: latValue,
+                lng: lngValue
+            },
+            radius: '500',
+            type: ['restaurant']
+        };
+
+        service = new google.maps.places.PlacesService(map);
+        service.nearbySearch(request, callback);
+
+        function callback(results, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                for (var i = 0; i < results.length; i++) {
+                    var place = results[i];
+                    createMarker(results[i]);
+                    console.log(results);
+                }
+            }
+        }
+
+        function createMarker(place) {
+            var placeLoc = place.geometry.location;
+            var marker = new google.maps.Marker({
+                map: map,
+                position: place.geometry.location,
+                icon: {
+                    url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                }
+            });
+            var infowindow = new google.maps.InfoWindow({
+                content: `${place.name}<br>${place.vicinity}`,
+                map: map,
+            });
+            // marker.addListener('mouseover', function () {
+            //     infowindow.open(map, this);
+            // });
+            // marker.addListener('mouseout', function () {
+            //     infowindow.close();
+            // });
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, this);
+            });
+        }
     });
 
     // geolocation API
