@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="src" href="./pinterest-api-demo/src">
+    <title>TEST Pinterest API</title>
+</head>
+<body>
+    <h1>Check Pinterest</h1>
+    <script>
+        window.pAsyncInit = function() {
+            PDK.init({
+                appId: "5005563437172944344", // Change this
+                cookie: true
+            });
+            console.log("foo");
+        };
+       
+        (function(d, s, id){
+            var js, pjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); 
+            js.id = id;
+            js.src = "https://assets.pinterest.com/sdk/sdk.js";
+            pjs.parentNode.insertBefore(js, pjs);
+        }(document, 'script', 'pinterest-jssdk'));
+
+    var params = {
+                fields: 'id,note,link,image'};
+     
+    var pins = [];
+    
+    pinterest.PDK,request('/boards/<board_id>/pins/',);
+    PDK.request('/boards/<board_id>/pins/', function (response) { // Make sure to change the board_id
+            if (!response || response.error) {
+                alert('Error occurred');
+            } else {
+                pins = pins.concat(response.data);
+                if (response.hasNext) {
+                    response.next(); // this will recursively go to this same callback
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
