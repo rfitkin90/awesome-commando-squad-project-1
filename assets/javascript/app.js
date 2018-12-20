@@ -12,28 +12,45 @@ $(document).ready(function () {
    firebase.initializeApp(config);
    var database = firebase.database();
 
-   var provider = new firebase.auth.GoogleAuthProvider();
-   firebase.auth().signInWithRedirect(provider);
-   provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
    
-   firebase.auth().getRedirectResult().then(function (result) {
-      if (result.credential) {
-         // This gives you a Google Access Token. You can use it to access the Google API.
-         var token = result.credential.accessToken;
-         // ...
+   var user = firebase.auth().currentUser;
+   console.log(user);
+      if (user || firebase.auth().getRedirectResult()) {
+         // User is signed in.
+         firebase.auth().getRedirectResult().then(function (result) {
+            console.log(result)
+
+            if (result.credential) {
+               // This gives you a Google Access Token. You can use it to access the Google API.
+               var token = result.credential.accessToken;
+               
+            }
+            else {
+               var provider = new firebase.auth.GoogleAuthProvider();
+               console.log(1)
+               firebase.auth().signInWithRedirect(provider);
+            }
+            // The signed-in user info.
+            var user = result.user;
+         }).catch(function (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+         });
+      
+      } else {
+         // No user is signed in.
+         console.log(1)
+        
+         console.log(1)
+        
       }
-      // The signed-in user info.
-      var user = result.user;
-   }).catch(function (error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
-   });
+
 
 
    // seatgeek api
@@ -114,6 +131,7 @@ $(document).ready(function () {
             ${$(this).attr('data-country')}&appid=${APIKey}`;
 
       // round date down to nearest 3rd hour and match the response data's date format
+      
       var dateRemainder = moment($(this).attr('data-date')).hour() % 3;
       var convertedDate = moment($(this).attr('data-date')).startOf('hour')
          .subtract(dateRemainder, 'h').format('YYYY-MM-DD HH:mm:ss');
