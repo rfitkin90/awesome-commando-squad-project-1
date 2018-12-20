@@ -69,13 +69,14 @@ $(document).ready(function () {
       e.preventDefault();
       var queryURL = `https://api.seatgeek.com/2/events?taxonomies.name=${eventType}
             &q=${$("#seatgeek-argument").val().trim()}&client_id=MTQ0NTM0OTl8MTU0NTA2ODg0NC43Mg`;
-            queryText = $("#seatgeek-argument").val().trim();
-            $('#seatgeek-argument').val('');
+      queryText = $("#seatgeek-argument").val().trim();
+      $('#seatgeek-argument').val('');
       axios.get(queryURL)
          .then(function (response) {
             console.log(response);
             for (var i = 0; i < 10; i++) {
                // individual result div
+               // console.log(response.data.events.length === 0);
                $('#seatgeek-results').append(`<div class='result-div' id='result-${response.data.events[i].id}'>
                         </div>`);
                // event title
@@ -149,12 +150,19 @@ $(document).ready(function () {
       // get weather response
       axios.get(queryURL)
          .then(function (response) {
-            console.log(moment($(this).attr('data-date')).diff(moment(response.data.list[response.data.list.length - 1].dt_txt), 'h'));
+            console.log(moment($(this).attr('data-date')));
+            console.log(moment(response.data.list[response.data.list.length - 1].dt_txt));
+            console.log(moment($(this).attr('data-date')).diff(moment(response.data.list[response.data.list.length - 1].dt_txt), 'm'));
             console.log(response.data.list.length - 1);
             console.log(response.data.list[response.data.list.length - 1]);
-            console.log(response.data.list[response.data.list.length - 1].dt_txt);
-            // if event is within the next 5 days(can't get forecast data beyond that w/o $)
-            if (Math.abs(moment().diff(moment($(this).attr('data-date')), 'd')) <= 5) {
+
+            // if event is before first forecast
+            if (moment($(this).attr('data-date')).diff(moment(response.data.list[0].dt_txt), 'h') < 0) {
+
+
+
+               // if event is within the next 5 days(can't get forecast data beyond that w/o $)
+            } else if (moment($(this).attr('data-date')).diff(moment(response.data.list[response.data.list.length - 1].dt_txt), 'h') < 0) {
 
                // find forecast with date equal to converted event date
                var i = response.data.list.findIndex(item => item.dt_txt === convertedDate);
@@ -242,13 +250,18 @@ $(document).ready(function () {
       var lngValue = parseFloat($(this).attr('data-lng'));
       console.log(latValue);
       console.log(lngValue);
-      var map = new google.maps.Map(document.getElementById('map'), {
-         zoom: 15,
-         center: {
-            lat: latValue,
-            lng: lngValue
-         }
-      });
+      var map;
+      initMap();
+      function initMap() {
+         console.log('yo');
+         map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: {
+               lat: latValue,
+               lng: lngValue
+            }
+         });
+      }
       var marker = new google.maps.Marker({
          position: {
             lat: latValue,
