@@ -23,7 +23,6 @@ $(document).ready(function () {
             if (result.credential) {
                // This gives you a Google Access Token. You can use it to access the Google API.
                var token = result.credential.accessToken;
-               
             }
             else {
                var provider = new firebase.auth.GoogleAuthProvider();
@@ -300,7 +299,7 @@ $(document).ready(function () {
 
       // update title
       var query = "pelicans";
-      $('#tweets').append(`${query} tweets`);
+      $('#tweets').append(`<p id='tweet-title'>${query} tweets</p>`);
 
       var cb = new Codebird;
       // API TOKEN AND SECRET - DO NOT PUBLISH
@@ -331,7 +330,7 @@ $(document).ready(function () {
 
                   // iterate through tweets and add to list
                   reply.statuses.forEach(function (tweet) {
-                     $('#tweets').append(`<p>${tweet.text}</p>`);
+                     $('#tweet-title').after(`<p>${tweet.text}</p>`);
                   });
                }
             });
