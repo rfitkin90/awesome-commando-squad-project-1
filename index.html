@@ -8,7 +8,7 @@
     <title>Event Planner</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- <link rel="stylesheet" href="./assets/css/reset.css"> -->
+    <link rel="stylesheet" href="./assets/css/reset.css">
     <script src="./assets/javascript/moment-with-locales.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
@@ -29,31 +29,48 @@
 
 <body>
 
+    <!-- header section -->
+    <div class="header">
+        <h1 class="logo">Live Event Planner</h1>
+    </div>
+
     <!-- seatgeek API -->
     <form>
         <button class='btn' id='sports-argument'>Sports</button>
         <button class='btn' id='music-argument'>Music</button>
         <div class="form-group">
-            <label for="exampleInputPassword1">Enter Artist or Team Name</label>
-            <input class="form-control" id="seatgeek-argument" placeholder="">
+            <input class="form-control" id="seatgeek-argument" placeholder="Enter Artist or Team Name">
         </div>
         <button type="submit" class="btn btn-primary" id='seatgeek-btn'>Submit</button>
     </form>
 
-    <!-- additional information div -->
-    <div id="additional-info">
-        <h2>Additional Info</h2>
-        <div id="weather-info"></div>
-        <!-- google map -->
-        <div id="map"></div>
-    
-        <!-- twitter -->
-        <div id="tweets"></div>
+    <div class="container">
+        <div class="row">
+
+            <!-- event choices -->
+            <div class="col-md-5">
+                <div id='seatgeek-results'></div>
+            </div>
+
+            <!-- additional information div -->
+            <div class="col-md-7">
+                    <p id="additional-info-title">Additional Info</p>
+                <div id="additional-info">
+                    <div id="weather-info"></div>
+                    <!-- google map -->
+                    <div id="map"></div>
+                    <!-- twitter -->
+                    <div id="tweets"></div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 
-    <!-- event choices -->
-    <div id='seatgeek-results'></div>
+
+
+
 
 </body>
 
