@@ -12,46 +12,46 @@ $(document).ready(function () {
    firebase.initializeApp(config);
    var database = firebase.database();
 
-   
+
    var user = firebase.auth().currentUser;
    console.log(user);
-      if (user || firebase.auth().getRedirectResult()) {
-         // User is signed in.
-         firebase.auth().getRedirectResult().then(function (result) {
-            console.log(result)
+   if (user || firebase.auth().getRedirectResult()) {
+      // User is signed in.
+      firebase.auth().getRedirectResult().then(function (result) {
+         console.log(result)
 
-            if (result.credential) {
-               // This gives you a Google Access Token. You can use it to access the Google API.
-               var token = result.credential.accessToken;
-               
-            }
-            else {
-               var provider = new firebase.auth.GoogleAuthProvider();
-               console.log(1)
-               firebase.auth().signInWithRedirect(provider);
-            }
-            // The signed-in user info.
-            var user = result.user;
-         }).catch(function (error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-            // ...
-         });
-      
-      } else {
-         // No user is signed in.
-         console.log(1)
-        
-         console.log(1)
-        
-      }
+         if (result.credential) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+         }
+         else {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            console.log(1)
+            firebase.auth().signInWithRedirect(provider);
+         }
+         // The signed-in user info.
+         var user = result.user;
+      }).catch(function (error) {
+         // Handle Errors here.
+         var errorCode = error.code;
+         var errorMessage = error.message;
+         // The email of the user's account used.
+         var email = error.email;
+         // The firebase.auth.AuthCredential type that was used.
+         var credential = error.credential;
+         // ...
+      });
+
+   } else {
+      // No user is signed in.
+      console.log(1)
+
+      console.log(1)
+
+   }
 
 
+   var queryText;
 
    // seatgeek api
    var eventType;
@@ -69,6 +69,8 @@ $(document).ready(function () {
       e.preventDefault();
       var queryURL = `https://api.seatgeek.com/2/events?taxonomies.name=${eventType}
             &q=${$("#seatgeek-argument").val().trim()}&client_id=MTQ0NTM0OTl8MTU0NTA2ODg0NC43Mg`;
+            queryText = $("#seatgeek-argument").val().trim();
+            $('#seatgeek-argument').val('');
       axios.get(queryURL)
          .then(function (response) {
             console.log(response);
@@ -77,44 +79,52 @@ $(document).ready(function () {
                $('#seatgeek-results').append(`<div class='result-div' id='result-${response.data.events[i].id}'>
                         </div>`);
                // event title
-               $(`#result-${response.data.events[i].id}`).append(`<h2>${response.data.events[i].title}</h2>`);
+               $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-title'></div>`);
+               $(`#${response.data.events[i].id}-title`).append(`<div>${response.data.events[i].title}</div>`);
                // performers
-               $(`#result-${response.data.events[i].id}`).append(`<h3>Performers</h3>`);
+               $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-performers'></div>`);
+               $(`#${response.data.events[i].id}-performers`).append(`<div><p class='info-title'>Performers: </p></div>`);
                // limit sport events to 2 performers so you don't get some other irrelevant info for 3rd
                if (eventType === 'sports') {
                   for (var j = 0; j < 2; j++) {
-                     $(`#result-${response.data.events[i].id}`).append(`
-                                ${response.data.events[i].performers[j].name}<br>`);
+                     $(`#${response.data.events[i].id}-performers`).append(`<p>
+                                ${response.data.events[i].performers[j].name}</p>`);
                   }
                } else {
                   for (var j = 0; j < response.data.events[i].performers.length; j++) {
-                     $(`#result-${response.data.events[i].id}`).append(`
-                                ${response.data.events[i].performers[j].name}<br>`);
+                     $(`#${response.data.events[i].id}-performers`).append(`<p>
+                                ${response.data.events[i].performers[j].name}</p>`);
                   }
                }
                // venue
-               $(`#result-${response.data.events[i].id}`).append(`<h3>Venue</h3>`);
-               $(`#result-${response.data.events[i].id}`).append(response.data.events[i].venue.name);
-               $(`#result-${response.data.events[i].id}`).append(`<p class='location' 
-                        id='location-${response.data.events[i].id}'>
-                        ${response.data.events[i].venue.address}</p>`);
-               $(`#result-${response.data.events[i].id}`).append(`<p>
-                        ${response.data.events[i].venue.extended_address}</p>`);
+               $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-venue'></div>`);
+               $(`#${response.data.events[i].id}-venue`).append(`<p class='info-title'>Venue: </p>`);
+               $(`#${response.data.events[i].id}-venue`).append(response.data.events[i].venue.name);
+               $(`#${response.data.events[i].id}-venue`).append(`<p>${response.data.events[i].venue.display_location}</p>`);
+               // $(`#result-${response.data.events[i].id}`).append(`<p class='location' 
+               //          id='location-${response.data.events[i].id}'>
+               //          ${response.data.events[i].venue.address}</p>`);
+               // $(`#result-${response.data.events[i].id}`).append(`<p>
+               //          ${response.data.events[i].venue.extended_address}</p>`);
                // time/date
-               $(`#result-${response.data.events[i].id}`).append(`<h3>Date/Time</h3>`);
-               $(`#result-${response.data.events[i].id}`).append(`<p>
-                        ${moment(response.data.events[i].datetime_local).format('MMMM Do YYYY, h:mm:ss a')}</p>`);
+               $(`#result-${response.data.events[i].id}`).append(`<div class='info-div' id='${response.data.events[i].id}-date'></div>`);
+               $(`#${response.data.events[i].id}-date`).append(`<span class='info-title'>Date/Time: </span><span>
+                        ${moment(response.data.events[i].datetime_local).format('MMMM Do YYYY, h:mm:ss a')}</span><br>`);
                // page url
-               $(`#result-${response.data.events[i].id}`).append(`<h3>Shop Tickets</h3>`);
-               $(`#result-${response.data.events[i].id}`).append(`<p><a href='${response.data.events[i].url}' 
-                        target='blank'>${response.data.events[i].url}</a></p>`);
+               // $(`#result-${response.data.events[i].id}`).append(`<h3>Shop Tickets</h3>`);
+               // $(`#result-${response.data.events[i].id}`).append(`<p><a href='${response.data.events[i].url}' 
+               //          target='blank'>${response.data.events[i].url}</a></p>`);
                // more info
                $(`#result-${response.data.events[i].id}`).append(`<button class='btn info-btn'
                         data-zipcode='${response.data.events[i].venue.postal_code}' 
                         data-country='${response.data.events[i].venue.country}'
                         data-date='${response.data.events[i].datetime_local}'
                         data-lat='${response.data.events[i].venue.location.lat}'
-                        data-lng='${response.data.events[i].venue.location.lon}'>More Info</button>`);
+                        data-lng='${response.data.events[i].venue.location.lon}'
+                        data-address='${response.data.events[i].venue.address}'
+                        data-extendAddress='${response.data.events[i].venue.extended_address}'
+                        data-tickets='${response.data.events[i].url}'
+                        >More Info</button>`);
             }
          });
       ;
@@ -125,7 +135,7 @@ $(document).ready(function () {
    $(document).on('click', '.info-btn', function (e) {
       e.preventDefault();
       $('#weather-info').empty();
-      $('#weather-info').append(`<h4>Weather</h4>`);
+      $('#weather-info').append(`<p id='weather-title'>Weather</p>`);
       var APIKey = "166a433c57516f51dfab1f7edaed8413";
       var queryURL = `https://api.openweathermap.org/data/2.5/forecast?zip=${$(this).attr('data-zipcode')},
             ${$(this).attr('data-country')}&appid=${APIKey}`;
@@ -231,6 +241,8 @@ $(document).ready(function () {
       console.log('hey');
       var latValue = parseFloat($(this).attr('data-lat'));
       var lngValue = parseFloat($(this).attr('data-lng'));
+      console.log(latValue);
+      console.log(lngValue);
       var map = new google.maps.Map(document.getElementById('map'), {
          zoom: 15,
          center: {
@@ -300,8 +312,8 @@ $(document).ready(function () {
       e.preventDefault();
 
       // update title
-      var query = "pelicans";
-      $('#tweets').append(`${query} tweets`);
+      var query = queryText;
+      $('#tweets').append(`<p id='tweet-title'>${query} tweets</p>`);
 
       var cb = new Codebird;
       // API TOKEN AND SECRET - DO NOT PUBLISH
@@ -332,7 +344,7 @@ $(document).ready(function () {
 
                   // iterate through tweets and add to list
                   reply.statuses.forEach(function (tweet) {
-                     $('#tweets').append(`<p>${tweet.text}</p>`);
+                     $('#tweet-title').after(`<div class='tweet-div'>${tweet.text}</div>`);
                   });
                }
             });
