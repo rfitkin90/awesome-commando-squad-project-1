@@ -13,7 +13,16 @@ $(document).ready(function () {
    var database = firebase.database();
 
    var provider = new firebase.auth.GoogleAuthProvider();
-   firebase.auth().signInWithRedirect(provider);
+   firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+         // User is signed in.
+      } else {
+         // No user is signed in.
+         firebase.auth().signInWithRedirect(provider);
+      }
+   });
+
+
    firebase.auth().getRedirectResult().then(function (result) {
       if (result.credential) {
          // This gives you a Google Access Token. You can use it to access the Google API.
@@ -32,7 +41,6 @@ $(document).ready(function () {
       var credential = error.credential;
       // ...
    });
-
 
    // seatgeek api
    var eventType;
