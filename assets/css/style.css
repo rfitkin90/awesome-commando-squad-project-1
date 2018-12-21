@@ -186,7 +186,6 @@ body{
 #sports-argument, #seatgeek-btn, #seatgeek-argument{
     align-items: center;
     justify-content: center;
-    margin-left: 35px;
 }
 
 
@@ -219,4 +218,8 @@ body{
 
 .inline-subheader {
     margin-top: 15px;
+}
+
+.marker-info {
+    color: #000000;
 }
