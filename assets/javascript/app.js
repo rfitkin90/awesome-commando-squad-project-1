@@ -49,7 +49,14 @@ $(document).ready(function () {
       console.log(1)
 
    }
-
+   $(document).on('click', '#logout-btn', function (e) {
+      firebase.auth().signOut().then(function () {
+         // Sign-out successful.
+      }).catch(function (error) {
+         // An error happened.
+      });
+      console.log("Signed out");
+   })
 
    var queryText;
 
