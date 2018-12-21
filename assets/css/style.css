@@ -6,6 +6,7 @@
     border: 2px solid #777;
     line-height: 1.5;
     padding: 10px;
+    background-color: #191a1e;
 }
 
  /* Always set the map height explicitly to define the size of the div
@@ -66,13 +67,15 @@ body{
 }
 
 #seatgeek-argument {
-    width: 300px;
+    max-width: 300px;
     margin-top: 10px;
 }
 
 #seatgeek-results {
   height:500px;
   overflow-y: scroll;
+  border: 2px solid grey;
+  margin-bottom: 15px;
 }
 
 .info-div {
@@ -142,8 +145,15 @@ body{
   display: block;
 }
 
+#tweets {
+    overflow-y: scroll;
+    height: 300px;
+    width: 100%;
+    margin-top: 10px;
+}
+
 .tweet-div {
-    border: 1px solid grey;
+    border: 2px solid grey;
     padding: 5px;
     margin: 10px;
     color: white;
@@ -171,4 +181,35 @@ body{
 .modal-title{
     font-weight: bold;
     color: #000000;
+}
+
+.info-title {
+    font-weight: bold;
+}
+
+#submission-form {
+    margin-bottom: 15px;
+}
+
+#additional-info-event-title {
+    font-weight: bold;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+#additional-info {
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+.sub-header {
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.inline-subheader {
+    margin-top: 15px;
 }
