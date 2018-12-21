@@ -18,7 +18,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJspIZnBYBASjscIsyBXVgUnt-u7SETMY&libraries=places"></script>
     <script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
     <script type="text/javascript">
-        gapi.load('auth2', function () {
+        gapi.load("auth2", function () {
             // Library loaded.
         });
     </script>
@@ -31,33 +31,38 @@
 
     <!-- header section -->
     <div class="header">
-        <h1 class="logo">Live Event Planner</h1>
-        <button type="log-out" class="btn btn-primary" id='logout-btn'>Sign Out</button>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1 class="logo">Live Event Planner</h1>
+                  <button type="log-out" class="btn btn-primary" id='logout-btn'>Sign Out</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- seatgeek API -->
-    <form>
-        <button class='btn' id='sports-argument'>Sports</button>
-        <button class='btn' id='music-argument'>Music</button>
-        <div class="form-group">
-            <input class="form-control" id="seatgeek-argument" placeholder="Enter Artist or Team Name">
-        </div>
-        <button type="submit" class="btn btn-primary" id='seatgeek-btn'>Submit</button>
-    </form>
 
     <div class="container">
-        <div class="row">
-
-            <!-- event choices -->
-            <div class="col-md-5">
-                <div id='seatgeek-results'></div>
-            </div>
-
+        <div class="row flex-md-row-reverse">
             <!-- additional information div -->
-            <div class="col-md-7">               
+            <div class="col-md-7">
                 <div id="additional-info"></div>
             </div>
 
+            <div class="col-md-5">
+                <!-- event search submission -->
+                <form id="submission-form">
+                    <button class="btn" id="sports-argument">Sports</button>
+                    <button class="btn" id="music-argument">Music</button>
+                    <div class="form-group">
+                        <input class="form-control" id="seatgeek-argument" placeholder="Enter Artist or Team Name">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="seatgeek-btn">Submit</button>
+                </form>
+
+                <!-- event choices -->
+                <div id="seatgeek-results" style="visibility: hidden"></div>
+            </div>
         </div>
     </div>
 
@@ -66,26 +71,24 @@
     <div class="modal" id="myModal">
         <div class="modal-dialog">
             <div class="modal-content">
-    
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title">Error Message</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-    
+
                 <!-- Modal body -->
-                <div class="modal-body" id = "modal-text">
+                <div class="modal-body" id="modal-text">
                 </div>
-    
+
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
-    
             </div>
         </div>
     </div>
-      
+
 
 
 
