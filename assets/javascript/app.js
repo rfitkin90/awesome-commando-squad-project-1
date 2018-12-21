@@ -102,8 +102,9 @@ $(document).ready(function () {
                $('.modal-body').text("No upcoming events...");
                $('#myModal').modal('show');
             } else {
+               $('#seatgeek-results').css({ 'visibility': 'visible', });
+               $('#seatgeek-results').empty();
                for (var i = 0; i < 10; i++) {
-                  $('#seatgeek-results').css({ 'visibility': 'visible', });
                   // individual result div
                   $('#seatgeek-results').append(`<div class='result-div' 
                         id='result-${response.data.events[i].id}'></div>`);
@@ -182,6 +183,7 @@ $(document).ready(function () {
    // seatgeek additional info
    $(document).on('click', '.info-btn', function (e) {
       e.preventDefault();
+      $('#additional-info').empty();
       $('#additional-info').append('<p id="additional-info-title">Detailed Info</p>');
       $('#additional-info').append(`<p class='sub-header'>${$(this).attr('data-title')}</p>`);
       $('#additional-info').append(`<p class='sub-header'>Performers:</p>`);
@@ -447,6 +449,7 @@ $(document).ready(function () {
                cb.__call("search_tweets", params, function (reply) {
                   console.log('💹  search_tweets.reply', reply);
                   if (reply.statuses) {
+                     console.log(reply);
                      console.log(reply.statuses);
 
                      // remove loading indicator
