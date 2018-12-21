@@ -410,6 +410,7 @@ $(document).ready(function () {
       }
    });
 
+
    // twitter api
    $(document).on('click', '.info-btn', function (e) {
       e.preventDefault();
