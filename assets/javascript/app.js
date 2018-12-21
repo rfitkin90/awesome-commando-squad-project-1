@@ -75,9 +75,9 @@ $(document).ready(function () {
          .then(function (response) {
             console.log(response);
             console.log(eventType);
-            if(eventType === undefined){
-                  $('.modal-body').text("Please select an event type.");
-                  $('#myModal').modal('show');     
+            if (eventType === undefined) {
+               $('.modal-body').text("Please select an event type.");
+               $('#myModal').modal('show');
             }
             else if (response.data.events.length === 0) {
                $('.modal-body').text("No upcoming events...");
@@ -146,12 +146,12 @@ $(document).ready(function () {
       e.preventDefault();
       $('#additional-info').append('<p id="additional-info-title">Additional Info</p>');
       $('#additional-info').css({
-          'border-width' : `${2}px`,
-          'border-type' : 'solid',
-          'border-color': '#77777',
-          'padding': `${5}px`
-     });
-     
+         'border-width': `${2}px`,
+         'border-type': 'solid',
+         'border-color': '#77777',
+         'padding': `${5}px`
+      });
+
       $('#additional-info').append('<div id = "weather-info">');
 
       $('#weather-info').empty();
@@ -161,7 +161,7 @@ $(document).ready(function () {
             ${$(this).attr('data-country')}&appid=${APIKey}`;
 
       // round date down to nearest 3rd hour and match the response data's date format
-      
+
       var dateRemainder = moment($(this).attr('data-date')).hour() % 3;
       var convertedDate = moment($(this).attr('data-date')).startOf('hour')
          .subtract(dateRemainder, 'h').format('YYYY-MM-DD HH:mm:ss');
@@ -170,7 +170,8 @@ $(document).ready(function () {
       // get weather response
       axios.get(queryURL)
          .then(function (response) {
-            console.log(moment($(this).attr('data-date')));
+            console.log(convertedDate);
+            console.log(moment(convertedDate));
             console.log(moment(response.data.list[response.data.list.length - 1].dt_txt));
             console.log(moment($(this).attr('data-date')).diff(moment(response.data.list[response.data.list.length - 1].dt_txt), 'm'));
             console.log(response.data.list.length - 1);
@@ -344,21 +345,21 @@ $(document).ready(function () {
    // twitter api
    $(document).on('click', '.info-btn', function (e) {
       e.preventDefault();
-      
+
       $('#additional-info').append('<div id = "tweets">');
       // update title
       var query = queryText;
       $('#tweets').append(`<p class = 'btn' id='tweet-title'>${query} tweets</p>`);
 
-      $(document).on('click', '#tweet-title', function(e){
+      $(document).on('click', '#tweet-title', function (e) {
          console.log("button pressed");
-      
-      var cb = new Codebird;
-      // API TOKEN AND SECRET - DO NOT PUBLISH
-      cb.setConsumerKey("GzOQlmiqQSoFVC3pxUskiFZfV", "lU4VcpQXHBdKWrgXWct0ynGqHzDEB9kRAsmt60KyiH2dtVVDNf");
 
-      // get bearer token
-      
+         var cb = new Codebird;
+         // API TOKEN AND SECRET - DO NOT PUBLISH
+         cb.setConsumerKey("GzOQlmiqQSoFVC3pxUskiFZfV", "lU4VcpQXHBdKWrgXWct0ynGqHzDEB9kRAsmt60KyiH2dtVVDNf");
+
+         // get bearer token
+
          cb.__call("oauth2_token", {}, function (reply, err) {
             var bearer_token;
             if (err) {
@@ -367,10 +368,10 @@ $(document).ready(function () {
             if (reply) {
                bearer_token = reply.access_token;
                console.log('🐻 bearer_token', bearer_token);
-   
+
                // set security token
                cb.setBearerToken(bearer_token);
-   
+
                // search tweets
                var params = {
                   q: query
@@ -380,7 +381,7 @@ $(document).ready(function () {
                   console.log('💹  search_tweets.reply', reply);
                   if (reply.statuses) {
                      console.log(reply.statuses);
-   
+
                      // iterate through tweets and add to list
                      reply.statuses.forEach(function (tweet) {
                         $('#tweet-title').after(`<div class='tweet-div'>${tweet.text}</div>`);
@@ -391,7 +392,7 @@ $(document).ready(function () {
          });
       });
 
-      
+
 
    });
 
