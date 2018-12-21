@@ -1,55 +1,62 @@
 $(document).ready(function () {
 
-    // firebase config
-    var config = {
-        apiKey: "AIzaSyBm4oVISK-6ztxP0P-n7P3nTNGzRxXq6iU",
-        authDomain: "search-mashup.firebaseapp.com",
-        databaseURL: "https://search-mashup.firebaseio.com",
-        projectId: "search-mashup",
-        storageBucket: "search-mashup.appspot.com",
-        messagingSenderId: "1077728999470"
-    };
-    firebase.initializeApp(config);
-    var database = firebase.database();
+   // firebase config
+   var config = {
+      apiKey: "AIzaSyBm4oVISK-6ztxP0P-n7P3nTNGzRxXq6iU",
+      authDomain: "search-mashup.firebaseapp.com",
+      databaseURL: "https://search-mashup.firebaseio.com",
+      projectId: "search-mashup",
+      storageBucket: "search-mashup.appspot.com",
+      messagingSenderId: "1077728999470"
+   };
+   firebase.initializeApp(config);
+   var database = firebase.database();
 
 
-    var user = firebase.auth().currentUser;
-    console.log(user);
-    if (user || firebase.auth().getRedirectResult()) {
-        // User is signed in.
-        firebase.auth().getRedirectResult().then(function (result) {
-            console.log(result)
+   var user = firebase.auth().currentUser;
+   console.log(user);
+   if (user || firebase.auth().getRedirectResult()) {
+      // User is signed in.
+      firebase.auth().getRedirectResult().then(function (result) {
+         console.log(result)
 
-            if (result.credential) {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                var token = result.credential.accessToken;
-            }
-            else {
-                var provider = new firebase.auth.GoogleAuthProvider();
-                console.log(1)
-                firebase.auth().signInWithRedirect(provider);
-            }
-            // The signed-in user info.
-            var user = result.user;
-        }).catch(function (error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-            // ...
-        });
+         if (result.credential) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+         }
+         else {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            console.log(1)
+            firebase.auth().signInWithRedirect(provider);
+         }
+         // The signed-in user info.
+         var user = result.user;
+      }).catch(function (error) {
+         // Handle Errors here.
+         var errorCode = error.code;
+         var errorMessage = error.message;
+         // The email of the user's account used.
+         var email = error.email;
+         // The firebase.auth.AuthCredential type that was used.
+         var credential = error.credential;
+         // ...
+      });
 
-    } else {
-        // No user is signed in.
-        console.log(1)
+   } else {
+      // No user is signed in.
+      console.log(1)
 
-        console.log(1)
+      console.log(1)
 
-    }
-
+   }
+   $(document).on('click', '#logout-btn', function (e) {
+      firebase.auth().signOut().then(function () {
+         // Sign-out successful.
+      }).catch(function (error) {
+         // An error happened.
+      });
+      console.log("Signed out");
+   });
 
     var queryText;
 

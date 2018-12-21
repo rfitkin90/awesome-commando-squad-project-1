@@ -1,7 +1,4 @@
 
-
-
-
 .result-div {
     border: 2px solid #777;
     line-height: 1.5;
@@ -52,8 +49,8 @@ body{
   color: #ffffff;
 }
 .header{
-    width:100%;
-    height:60px;
+    width: 100%;
+    height: 111px;
     background-color: rgba(0, 0, 0, 0.5);
     color: #ffffff;
 }
@@ -87,24 +84,27 @@ body{
 }
 
 .btn {
+    
     background-color: #535353;
     border-color: #535353;
     color: #ffffff;
 }
 
 .logo{
-    font-size:25px;
-    font-family:verdana;
-    text-align:left;
-    margin-top:0px;
-    float:left;
-    margin:0px;
-    line-height:50px;
-    padding-left:9px;
+    font-size: 32px;
+    font-family: verdana;
+    text-align: left;
+    margin-top: 0px;
+    float: left;
+    margin: 26px;
+    line-height: 50px;
+    padding-left: 9px;
 }
-.inputBox {
+
+#logout-btn {
     float: right;
-    margin-top: 15px;
+    margin-top: 26px;
+    margin-right: 13px;
 }
     
 .wrap{
@@ -182,6 +182,13 @@ body{
     font-weight: bold;
     color: #000000;
 }
+
+#sports-argument, #seatgeek-btn, #seatgeek-argument{
+    align-items: center;
+    justify-content: center;
+    margin-left: 35px;
+}
+
 
 .info-title {
     font-weight: bold;
