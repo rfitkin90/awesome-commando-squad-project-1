@@ -452,6 +452,7 @@ $(document).ready(function () {
                      // remove loading indicator
                      var loading = document.getElementById('loading');
                      loading.remove();
+                     
 
                      // iterate through tweets and add to list
                      reply.statuses.forEach(function (tweet) {
