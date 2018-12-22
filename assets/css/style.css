@@ -70,6 +70,14 @@ body{
     margin-top: 10px;
 }
 
+#scheduled-events-panel {
+    overflow-y: scroll;
+    border: 2px solid grey;
+    margin-bottom: 15px;
+    background-color: #191a1e;
+    padding-left: 5px;
+  }
+
 #seatgeek-results {
   height:500px;
   overflow-y: scroll;
@@ -220,6 +228,12 @@ body{
 }
 
 #upcoming-events-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#scheduled-events-title {
     text-align: center;
     font-weight: bold;
     margin-bottom: 5px;

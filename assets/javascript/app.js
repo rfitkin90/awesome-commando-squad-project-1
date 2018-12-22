@@ -58,10 +58,66 @@ $(document).ready(function () {
    //    console.log("Signed out");
    // });
 
-   var queryText;
+   // localStorage.clear();
+   var scheduledEventsArr = [];
+   // grab scheduled events from local storage(if there are any) and append to screen
+   scheduledEventsArr = JSON.parse(localStorage.getItem("scheduledEvents"));
+   console.log(scheduledEventsArr);
+   // if localstorage is empty, reinstate scheduled events arr as empty array
+   if (scheduledEventsArr === null) {
+      scheduledEventsArr = [];
+   }
+   if (scheduledEventsArr.length >= 1) {
+      console.log('sup');
+
+      $('#scheduled-events-title').css({ 'visibility': 'visible', });
+      $('#scheduled-events-panel').css({
+         'visibility': 'visible',
+         'height': `${150}px`,
+      });
+
+      for (var i = 0; i < scheduledEventsArr.length; i++) {
+         var dataID = scheduledEventsArr[i].dataId;
+         $('#scheduled-events-panel').append(`<div class='scheduled-event-div' id='scheduled-event-${dataID}'></div>`);
+         $(`#scheduled-event-${dataID}`).append(`<p class='scheduled-event-title' 
+               id='scheduled-title-${dataID}'>${scheduledEventsArr[i].dataShortTitle}</p>`);
+         $(`#scheduled-event-${dataID}`).append(`<div class='scheduled-event-btn-div' 
+               id='scheduled-event-btn-div-${dataID}'></div>`);
+         $(`#scheduled-event-btn-div-${dataID}`).append(`<button 
+               class='btn info-btn scheduled-event-info-btn' id='scheduled-event-info-btn-${dataID}'>Event Info</button>`);
+         $(`#scheduled-event-btn-div-${dataID}`).append(`<button 
+               class='btn scheduled-event-remove-btn' id='scheduled-event-remove-btn-${dataID}'>Remove Event</button>`);
+
+         // transfer again to scheduled event info btn
+         $(`#scheduled-event-info-btn-${dataID}`).attr({
+            'data-zipcode': scheduledEventsArr[i].dataZipcode,
+            'data-country': scheduledEventsArr[i].dataCountry,
+            'data-date': scheduledEventsArr[i].dataDate,
+            'data-lat': scheduledEventsArr[i].dataLat,
+            'data-lng': scheduledEventsArr[i].dataLng,
+            'data-venueName': scheduledEventsArr[i].dataVenueName,
+            'data-address': scheduledEventsArr[i].dataAddress,
+            'data-extendedAddress': scheduledEventsArr[i].dataExtendedAddress,
+            'data-tickets': scheduledEventsArr[i].dataTickets,
+            'data-title': scheduledEventsArr[i].dataTitle,
+            'data-shortTitle': scheduledEventsArr[i].dataShortTitle,
+            'data-id': scheduledEventsArr[i].dataId,
+            'data-performers': scheduledEventsArr[i].dataPerformers,
+            'data-performerAmount': scheduledEventsArr[i].dataPerformerAmount,
+            'data-queryText': scheduledEventsArr[i].dataQueryText,
+         });
+         console.log(scheduledEventsArr[i]);
+         for (var j = 0; j < scheduledEventsArr[i].dataPerformerAmount; j++) {
+            var dataPerformer = scheduledEventsArr[i]['performer' + j];
+            console.log(dataPerformer);
+            $(`#scheduled-event-info-btn-${dataID}`).attr(`data-performer${j}`, dataPerformer);
+         }
+      }
+   }
 
    // seatgeek api
    var eventType;
+   var queryText;
    // event type parameters
    $(document).on('click', '#sports-argument', function (e) {
       e.preventDefault();
@@ -161,6 +217,7 @@ $(document).ready(function () {
                         data-shortTitle='${response.data.events[i].short_title}'
                         data-performers='${response.data.events[i].performers}'
                         data-id='${response.data.events[i].id}'
+                        data-queryText='${queryText}'
                         >More Info</button>`);
                   if (eventType === 'sports') {
                      $(`#infoBtn-${response.data.events[i].id}`).attr('data-performerAmount', 2);
@@ -219,6 +276,7 @@ $(document).ready(function () {
          'data-id': $(this).attr('data-id'),
          'data-performers': $(this).attr('data-performers'),
          'data-performerAmount': $(this).attr('data-performerAmount'),
+         'data-queryText': $(this).attr('data-queryText'),
       });
       console.log($(this).attr('data-performers'));
       for (var i = 0; i < $(this).attr('data-performerAmount'); i++) {
@@ -231,6 +289,13 @@ $(document).ready(function () {
    // save event to scheduled events
    $(document).on('click', '#save-to-scheduled-events', function (e) {
       e.preventDefault();
+
+      $('#scheduled-events-title').css({ 'visibility': 'visible', });
+      $('#scheduled-events-panel').css({
+         'visibility': 'visible',
+         'height': `${150}px`,
+      });
+
       var dataID = $(this).attr('data-id');
       $('#scheduled-events-panel').append(`<div class='scheduled-event-div' id='scheduled-event-${dataID}'></div>`);
       $(`#scheduled-event-${dataID}`).append(`<p class='scheduled-event-title' 
@@ -240,7 +305,8 @@ $(document).ready(function () {
       $(`#scheduled-event-btn-div-${dataID}`).append(`<button 
             class='btn info-btn scheduled-event-info-btn' id='scheduled-event-info-btn-${dataID}'>Event Info</button>`);
       $(`#scheduled-event-btn-div-${dataID}`).append(`<button 
-            class='btn scheduled-event-remove-btn' id='scheduled-event-remove-btn-${dataID}'>Remove Event</button>`);
+            class='btn scheduled-event-remove-btn' id='scheduled-event-remove-btn-${dataID}' 
+            data-id='${dataID}'>Remove Event</button>`);
 
       // transfer again to scheduled event info btn
       $(`#scheduled-event-info-btn-${dataID}`).attr({
@@ -258,6 +324,7 @@ $(document).ready(function () {
          'data-id': $(this).attr('data-id'),
          'data-performers': $(this).attr('data-performers'),
          'data-performerAmount': $(this).attr('data-performerAmount'),
+         'data-queryText': $(this).attr('data-queryText'),
       });
       console.log($(this).attr('data-performers'));
       for (var i = 0; i < $(this).attr('data-performerAmount'); i++) {
@@ -265,7 +332,54 @@ $(document).ready(function () {
          $(`#scheduled-event-info-btn-${dataID}`).attr(`data-performer${i}`,
             `${dataPerformer}`);
       }
+
+      var scheduledEventObj = {
+         dataZipcode: $(this).attr('data-zipcode'),
+         dataCountry: $(this).attr('data-country'),
+         dataDate: $(this).attr('data-date'),
+         dataLat: $(this).attr('data-lat'),
+         dataLng: $(this).attr('data-lng'),
+         dataVenueName: $(this).attr('data-venueName'),
+         dataAddress: $(this).attr('data-address'),
+         dataExtendedAddress: $(this).attr('data-extendedAddress'),
+         dataTickets: $(this).attr('data-tickets'),
+         dataTitle: $(this).attr('data-title'),
+         dataShortTitle: $(this).attr('data-shortTitle'),
+         dataId: $(this).attr('data-id'),
+         dataPerformers: $(this).attr('data-performers'),
+         dataPerformerAmount: $(this).attr('data-performerAmount'),
+         dataQueryText: $(this).attr('data-queryText'),
+      };
+
+      for (var i = 0; i < $(this).attr('data-performerAmount'); i++) {
+         var dataPerformer = $(this).attr(`data-performer${i}`);
+         scheduledEventObj['performer' + i] = dataPerformer;
+      }
+
+      scheduledEventsArr.push(scheduledEventObj);
+      console.log(scheduledEventsArr);
+      localStorage.setItem('scheduledEvents', JSON.stringify(scheduledEventsArr));
+
    });
+
+   // remove event btn
+   $(document).on('click', '.scheduled-event-remove-btn', function (e) {
+      e.preventDefault();
+      console.log(scheduledEventsArr);
+      var i = scheduledEventsArr.findIndex(i => i.dataId === $(this).attr('data-id'));
+      console.log(i);
+      $(`#scheduled-event-${$(this).attr('data-id')}`).remove();
+      scheduledEventsArr.splice(i, 1);
+      if (scheduledEventsArr.length === 0) {
+         $('#scheduled-events-title').css({ 'visibility': 'hidden', });
+         $('#scheduled-events-panel').css({
+            'visibility': 'hidden',
+            'height': 0,
+         });
+      }
+      localStorage.setItem('scheduledEvents', JSON.stringify(scheduledEventsArr));
+   });
+
 
    // openweather API
    $(document).on('click', '.info-btn', function (e) {
@@ -482,7 +596,8 @@ $(document).ready(function () {
       e.preventDefault();
 
       // update title
-      var query = queryText;
+      console.log($(this).attr('data-queryText'));
+      var query = $(this).attr('data-queryText');
       $('#additional-info').append(`<p class='bold' id='tweet-title'>"${query}" Tweets:</p>`);
 
       // $(document).on('click', '#tweet-title', function (e) {
