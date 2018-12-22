@@ -422,13 +422,12 @@ $(document).ready(function () {
          console.log("button pressed");
          $('#additional-info').append('<div id="tweets">');
          $('#tweets').append('<span id="loading">Loading tweets...</span>');
-
+        
          var cb = new Codebird;
          // API TOKEN AND SECRET - DO NOT PUBLISH
          cb.setConsumerKey("GzOQlmiqQSoFVC3pxUskiFZfV", "lU4VcpQXHBdKWrgXWct0ynGqHzDEB9kRAsmt60KyiH2dtVVDNf");
 
          // get bearer token
-
          cb.__call("oauth2_token", {}, function (reply, err) {
             var bearer_token;
             if (err) {
@@ -455,7 +454,6 @@ $(document).ready(function () {
                      // remove loading indicator
                      var loading = document.getElementById('loading');
                      loading.remove();
-                     
 
                      // iterate through tweets and add to list
                      reply.statuses.forEach(function (tweet) {
