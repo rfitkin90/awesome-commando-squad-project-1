@@ -86,7 +86,8 @@ $(document).ready(function () {
          $(`#scheduled-event-btn-div-${dataID}`).append(`<button 
                class='btn info-btn scheduled-event-info-btn' id='scheduled-event-info-btn-${dataID}'>Event Info</button>`);
          $(`#scheduled-event-btn-div-${dataID}`).append(`<button 
-               class='btn scheduled-event-remove-btn' id='scheduled-event-remove-btn-${dataID}'>Remove Event</button>`);
+               class='btn scheduled-event-remove-btn' id='scheduled-event-remove-btn-${dataID}' 
+               data-id='${dataID}'>Remove Event</button>`);
 
          // transfer again to scheduled event info btn
          $(`#scheduled-event-info-btn-${dataID}`).attr({
@@ -289,77 +290,78 @@ $(document).ready(function () {
    // save event to scheduled events
    $(document).on('click', '#save-to-scheduled-events', function (e) {
       e.preventDefault();
+      var i = scheduledEventsArr.findIndex(i => i.dataId === $(this).attr('data-id'));
+      if (i === -1) {
+         $('#scheduled-events-title').css({ 'visibility': 'visible', });
+         $('#scheduled-events-panel').css({
+            'visibility': 'visible',
+            'height': `${150}px`,
+         });
 
-      $('#scheduled-events-title').css({ 'visibility': 'visible', });
-      $('#scheduled-events-panel').css({
-         'visibility': 'visible',
-         'height': `${150}px`,
-      });
-
-      var dataID = $(this).attr('data-id');
-      $('#scheduled-events-panel').append(`<div class='scheduled-event-div' id='scheduled-event-${dataID}'></div>`);
-      $(`#scheduled-event-${dataID}`).append(`<p class='scheduled-event-title' 
+         var dataID = $(this).attr('data-id');
+         $('#scheduled-events-panel').append(`<div class='scheduled-event-div' id='scheduled-event-${dataID}'></div>`);
+         $(`#scheduled-event-${dataID}`).append(`<p class='scheduled-event-title' 
             id='scheduled-title-${dataID}'>${$(this).attr('data-shortTitle')}</p>`);
-      $(`#scheduled-event-${dataID}`).append(`<div class='scheduled-event-btn-div' 
+         $(`#scheduled-event-${dataID}`).append(`<div class='scheduled-event-btn-div' 
             id='scheduled-event-btn-div-${dataID}'></div>`);
-      $(`#scheduled-event-btn-div-${dataID}`).append(`<button 
+         $(`#scheduled-event-btn-div-${dataID}`).append(`<button 
             class='btn info-btn scheduled-event-info-btn' id='scheduled-event-info-btn-${dataID}'>Event Info</button>`);
-      $(`#scheduled-event-btn-div-${dataID}`).append(`<button 
+         $(`#scheduled-event-btn-div-${dataID}`).append(`<button 
             class='btn scheduled-event-remove-btn' id='scheduled-event-remove-btn-${dataID}' 
             data-id='${dataID}'>Remove Event</button>`);
 
-      // transfer again to scheduled event info btn
-      $(`#scheduled-event-info-btn-${dataID}`).attr({
-         'data-zipcode': $(this).attr('data-zipcode'),
-         'data-country': $(this).attr('data-country'),
-         'data-date': $(this).attr('data-date'),
-         'data-lat': $(this).attr('data-lat'),
-         'data-lng': $(this).attr('data-lng'),
-         'data-venueName': $(this).attr('data-venueName'),
-         'data-address': $(this).attr('data-address'),
-         'data-extendedAddress': $(this).attr('data-extendedAddress'),
-         'data-tickets': $(this).attr('data-tickets'),
-         'data-title': $(this).attr('data-title'),
-         'data-shortTitle': $(this).attr('data-shortTitle'),
-         'data-id': $(this).attr('data-id'),
-         'data-performers': $(this).attr('data-performers'),
-         'data-performerAmount': $(this).attr('data-performerAmount'),
-         'data-queryText': $(this).attr('data-queryText'),
-      });
-      console.log($(this).attr('data-performers'));
-      for (var i = 0; i < $(this).attr('data-performerAmount'); i++) {
-         var dataPerformer = $(this).attr(`data-performer${i}`);
-         $(`#scheduled-event-info-btn-${dataID}`).attr(`data-performer${i}`,
-            `${dataPerformer}`);
+         // transfer again to scheduled event info btn
+         $(`#scheduled-event-info-btn-${dataID}`).attr({
+            'data-zipcode': $(this).attr('data-zipcode'),
+            'data-country': $(this).attr('data-country'),
+            'data-date': $(this).attr('data-date'),
+            'data-lat': $(this).attr('data-lat'),
+            'data-lng': $(this).attr('data-lng'),
+            'data-venueName': $(this).attr('data-venueName'),
+            'data-address': $(this).attr('data-address'),
+            'data-extendedAddress': $(this).attr('data-extendedAddress'),
+            'data-tickets': $(this).attr('data-tickets'),
+            'data-title': $(this).attr('data-title'),
+            'data-shortTitle': $(this).attr('data-shortTitle'),
+            'data-id': $(this).attr('data-id'),
+            'data-performers': $(this).attr('data-performers'),
+            'data-performerAmount': $(this).attr('data-performerAmount'),
+            'data-queryText': $(this).attr('data-queryText'),
+         });
+         console.log($(this).attr('data-performers'));
+         for (var i = 0; i < $(this).attr('data-performerAmount'); i++) {
+            var dataPerformer = $(this).attr(`data-performer${i}`);
+            $(`#scheduled-event-info-btn-${dataID}`).attr(`data-performer${i}`,
+               `${dataPerformer}`);
+         }
+
+         var scheduledEventObj = {
+            dataZipcode: $(this).attr('data-zipcode'),
+            dataCountry: $(this).attr('data-country'),
+            dataDate: $(this).attr('data-date'),
+            dataLat: $(this).attr('data-lat'),
+            dataLng: $(this).attr('data-lng'),
+            dataVenueName: $(this).attr('data-venueName'),
+            dataAddress: $(this).attr('data-address'),
+            dataExtendedAddress: $(this).attr('data-extendedAddress'),
+            dataTickets: $(this).attr('data-tickets'),
+            dataTitle: $(this).attr('data-title'),
+            dataShortTitle: $(this).attr('data-shortTitle'),
+            dataId: $(this).attr('data-id'),
+            dataPerformers: $(this).attr('data-performers'),
+            dataPerformerAmount: $(this).attr('data-performerAmount'),
+            dataQueryText: $(this).attr('data-queryText'),
+         };
+
+         for (var i = 0; i < $(this).attr('data-performerAmount'); i++) {
+            var dataPerformer = $(this).attr(`data-performer${i}`);
+            scheduledEventObj['performer' + i] = dataPerformer;
+         }
+
+         scheduledEventsArr.push(scheduledEventObj);
+         console.log(scheduledEventsArr);
+         localStorage.setItem('scheduledEvents', JSON.stringify(scheduledEventsArr));
       }
-
-      var scheduledEventObj = {
-         dataZipcode: $(this).attr('data-zipcode'),
-         dataCountry: $(this).attr('data-country'),
-         dataDate: $(this).attr('data-date'),
-         dataLat: $(this).attr('data-lat'),
-         dataLng: $(this).attr('data-lng'),
-         dataVenueName: $(this).attr('data-venueName'),
-         dataAddress: $(this).attr('data-address'),
-         dataExtendedAddress: $(this).attr('data-extendedAddress'),
-         dataTickets: $(this).attr('data-tickets'),
-         dataTitle: $(this).attr('data-title'),
-         dataShortTitle: $(this).attr('data-shortTitle'),
-         dataId: $(this).attr('data-id'),
-         dataPerformers: $(this).attr('data-performers'),
-         dataPerformerAmount: $(this).attr('data-performerAmount'),
-         dataQueryText: $(this).attr('data-queryText'),
-      };
-
-      for (var i = 0; i < $(this).attr('data-performerAmount'); i++) {
-         var dataPerformer = $(this).attr(`data-performer${i}`);
-         scheduledEventObj['performer' + i] = dataPerformer;
-      }
-
-      scheduledEventsArr.push(scheduledEventObj);
-      console.log(scheduledEventsArr);
-      localStorage.setItem('scheduledEvents', JSON.stringify(scheduledEventsArr));
-
    });
 
    // remove event btn
@@ -556,7 +558,7 @@ $(document).ready(function () {
             lng: lngValue
          },
          radius: '500',
-         type: ['restaurant']
+         type: ['restaurant'],
       };
 
       service = new google.maps.places.PlacesService(map);
@@ -575,16 +577,19 @@ $(document).ready(function () {
          var placeLoc = place.geometry.location;
          var marker = new google.maps.Marker({
             map: map,
-            position: place.geometry.location,
+            position: placeLoc,
             icon: {
                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-            }
+            },
+            name: place.name,
+            vicinity: place.vicinity,
          });
-         infowindow = new google.maps.InfoWindow({
-            content: `<p class='marker-info'>${place.name}</p><p class='marker-info'>${place.vicinity}</p>`,
-            map: map,
-         });
+         
          google.maps.event.addListener(marker, 'click', function () {
+            var infowindow = new google.maps.InfoWindow({
+               content: `<p class='marker-info'>${marker.name}</p><p class='marker-info'>${marker.vicinity}</p>`,
+               map: map,
+            });
             infowindow.open(map, this);
          });
       }
