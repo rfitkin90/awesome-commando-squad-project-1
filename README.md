@@ -1,5 +1,7 @@
 ### Live Event Planner App
 
+Helps the user plan a day trip to an upcoming sports game or concert by providing them with ticket and venue information, as well as information on nearby restaurants and weather forecasts.
+
 # Instructions
 
 1. Click either the sports or music button to refine your search to whichever type of event you are searching for.
